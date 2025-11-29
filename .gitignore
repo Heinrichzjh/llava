@@ -1,0 +1,8 @@
+data/
+images_dl/
+*.jpg
+Qwen1.5-1.8B-Chat/
+Qwen1.5-4B-Chat/
+show_model/
+show_model_v1
+openai/
