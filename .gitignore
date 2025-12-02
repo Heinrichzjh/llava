@@ -4,5 +4,12 @@ images_dl/
 Qwen1.5-1.8B-Chat/
 Qwen1.5-4B-Chat/
 show_model/
-show_model_v1
+show_model_v1/
 openai/
+output_model_user_lora_show/runs/
+*.log
+*.bin
+*.pt
+*.pth
+*.safetensors
+**/output_model_user_lora_show/

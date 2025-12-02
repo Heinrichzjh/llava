@@ -8,7 +8,7 @@ from torch.utils.data import Dataset
 from pathlib import Path
 from typing import Dict,List,Tuple
 from platform import processor
-from transformers import AutoProcessor
+from transformers import AutoProcessor,LlavaProcessor
 
 class LlavaDataset(Dataset):
     def __init__(self, dataset_dir: str) -> None:
@@ -58,7 +58,7 @@ def build_qaiamge(processor:LlavaProcessor,q_text:str,a_text:str,image_path:Path
     image_file=image_path
     raw_image=Image.open(fp=image_file)
 
-    inputs=processor(prompt,raw_image,return_tensors="pt")#根据词表（Vocabulary），把字符串切分并映射成对应的整数索引（Index）
+    inputs=processor(text=prompt,images=raw_image,return_tensors="pt")#根据词表（Vocabulary），把字符串切分并映射成对应的整数索引（Index）
 
     a_input_ids=processor.tokenizer(
         a_text,
@@ -86,7 +86,7 @@ class TrainLLavaModelCollator:
         input_ids=torch.concat([
             q_input_ids,
             a_input_ids,
-            torch.tensor(llava_processor.tokenizer.eos_token_id).reshape(1,-1)
+            torch.tensor(self.processor.tokenizer.eos_token_id).reshape(1,-1)
             ],
             axis=1,#在第二维度拼接
         )
@@ -111,7 +111,7 @@ class TrainLLavaModelCollator:
 
         for feature in features:
             qaimage_output=build_qaiamge(#图片文本放一起
-                processor=llava_processor,
+                self.processor,
                 q_text=feature[0],
                 a_text=feature[1],
                 image_path=feature[2]

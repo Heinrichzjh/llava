@@ -5,7 +5,7 @@ deepspeed --include localhost:0,1 run_show.py \
     --deepspeed ds_zero2_no_offload.json \
     --model_name_or_path show_model_v1/model001 \
     --train_type use_lora \
-    --data_path data/liuhaotian/LLaVA-CC3M-Pretrain-595K \
+    --data_path /home/ZJH/llava/build_llava/data/LLaVA-CC3M\
     --remove_unused_columns false \
     --bf16 true \
     --fp16 false \
@@ -13,11 +13,11 @@ deepspeed --include localhost:0,1 run_show.py \
     --dataloader_num_workers 10 \
     --dataloader_persistent_workers True \
     --output_dir output_model_user_lora_show \
-    --num_train_epochs 10 \
-    --per_device_train_batch_size 4 \
+    --num_train_epochs 1 \
+    --per_device_train_batch_size 2 \
     --per_device_eval_batch_size 1 \
     --gradient_accumulation_steps 8 \
-    --evaluation_strategy "no" \
+    --eval_strategy "no" \
     --save_strategy "epoch" \
     --save_total_limit 3 \
     --report_to "tensorboard" \

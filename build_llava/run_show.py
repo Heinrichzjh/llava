@@ -19,7 +19,7 @@ from transformers import (
     TrainingArguments,
 )
 
-from train_llava.custom_trainer import WebTrainer
+#from train_llava.custom_trainer import WebTrainer
 from show_llava.data import LlavaDataset, TrainLLavaModelCollator
 # from train_llava.data_websend import DatasetReceiveByWeb, TrainLlavaModelCollatorByWeb
 from show_llava.util import print_trainable_parameters
@@ -67,7 +67,22 @@ def load_model_processor(modelargs: ModelArguments):
         torch_dtype=torch.bfloat16,
         low_cpu_mem_usage=True,
     )
-    processor = LlavaProcessor.from_pretrained(modelargs.model_name_or_path)
+    processor = LlavaProcessor.from_pretrained(modelargs.model_name_or_path,torch_dtype=torch.bfloat16,
+        low_cpu_mem_usage=True)
+
+    if hasattr(processor, "image_processor"):
+        processor.image_processor.patch_size = 14
+        # 防止某些版本用的是 image_patch_size 这个名字
+        if not hasattr(processor.image_processor, "image_patch_size"):
+             processor.image_processor.image_patch_size = 14
+
+    # 2. 【关键】强制给 processor 本身也赋值
+    # 新版 transformers 可能会直接读取 self.patch_size
+    # 我们直接在实例字典里覆盖它，不管它原来是不是 None
+    try:
+        processor.patch_size = 14
+    except Exception:
+        pass # 如果是只读属性，可能赋值失败，忽略
 
     if modelargs.train_type == "use_lora":
         logging.warning("Loading model to Lora")
