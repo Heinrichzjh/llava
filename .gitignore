@@ -12,13 +12,13 @@ output_model_user_lora_show/runs/
 *.pt
 *.pth
 *.txt
+*.pyc
 *.safetensors
 **/output_model_user_lora_show/
 
 analyze_llava/
 onevision/llava_onevision/
 onevision/llava_onevision_1/
-onevision/show_onevision/
 onevision/drive-action/
 onevision/drive_action_output/
 onevision/output_drive_action_onevision_v1/
