@@ -1,0 +1,24 @@
+deepspeed --include localhost:0,1 run_onevision.py \
+    --deepspeed ds_zeros_no_offload_onevision.json \
+    --model_name_or_path /home/ZJH/llava/onevision/llava_onevision_1 \
+    --train_type use_lora \
+    --data_path /home/ZJH/llava/onevision/drive_action_output \
+    --remove_unused_columns false \
+    --bf16 true \
+    --fp16 false \
+    --output_dir output_drive_action_onevision_v1 \
+    --num_train_epochs 1 \
+    --max_steps -1 \
+    --per_device_train_batch_size 1 \
+    --per_device_eval_batch_size 1 \
+    --gradient_accumulation_steps 16 \
+    --learning_rate 2e-4 \
+    --weight_decay 0.01 \
+    --warmup_ratio 0.03 \
+    --lr_scheduler_type "cosine" \
+    --logging_steps 1 \
+    --save_strategy "steps" \
+    --save_steps 500 \
+    --report_to "tensorboard" \
+    --dataloader_num_workers 0 \
+    --gradient_checkpointing true
